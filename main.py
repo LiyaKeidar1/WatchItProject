@@ -1,7 +1,7 @@
 from queue import Queue
 from alert_service import AlertService, AlertMessage
 import json, time, threading
-from consts import SENSORS_MAP, TOO_LOW, TOO_HIGH, VALID
+from consts import *
 
 
 
@@ -43,7 +43,7 @@ if __name__ == "__main__":
     configuration = load_configuration('config.json')
 
     # Initialize alert service
-    alert_service = AlertService(api_token="xoxe.xoxp-1-Mi0yLTY3MzkzMDEyNjc0NjAtNjc0OTUwMzk4OTY0OS02NzMzOTM1MzQ1MTczLTY3Mzk1MjMwMTIzNTYtZjI0YmIyMWMwZmRhZjQzZmNkNWU5MWE1YmVhMjcyNmQzNGYyODI2OTkyN2IwMGUzMjJmZmU0NjVlNjUxYjJkZA")
+    alert_service = AlertService(api_token=API_TOKEN)
 
     threading.Thread(target=alert_service.start, args=(alert_queue,)).start()
 
