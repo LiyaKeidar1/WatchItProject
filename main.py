@@ -1,10 +1,8 @@
 from queue import Queue
 from alert_service import AlertService, AlertMessage
 import json, time, threading
-from consts import *
+from consts import SENSORS_MAP, TOO_LOW, TOO_HIGH, VALID
 
-
-alert_queue = Queue()
 
 
 def load_configuration(path) -> json:
@@ -13,9 +11,12 @@ def load_configuration(path) -> json:
 
 
 def data_in_range(data, valid_range) -> int:
-    if valid_range[0] <= data <= valid_range[1]: return VALID
-    if data < valid_range[0]: return TOO_LOW
-    if data > valid_range[1]: return TOO_HIGH
+    if valid_range[0] <= data <= valid_range[1]:
+        return VALID
+    if data < valid_range[0]:
+        return TOO_LOW
+    if data > valid_range[1]:
+        return TOO_HIGH
 
 
 def sensor_monitor(sensor, valid_range, queue: Queue):
@@ -29,22 +30,27 @@ def sensor_monitor(sensor, valid_range, queue: Queue):
         elif range_validity == TOO_HIGH:
             queue.put(AlertMessage(sensor=sensor.sensor_type, message_type="high", data=data))
 
-            time.sleep(1)
+        time.sleep(1)
 
 
 
 
 if __name__ == "__main__":
 
+    alert_queue = Queue()
+
     # Load configuration
     configuration = load_configuration('config.json')
 
     # Initialize alert service
-    alert_service = AlertService(api_token="???????????")
+    alert_service = AlertService(api_token="xoxe.xoxp-1-Mi0yLTY3MzkzMDEyNjc0NjAtNjc0OTUwMzk4OTY0OS02NzMzOTM1MzQ1MTczLTY3Mzk1MjMwMTIzNTYtZjI0YmIyMWMwZmRhZjQzZmNkNWU5MWE1YmVhMjcyNmQzNGYyODI2OTkyN2IwMGUzMjJmZmU0NjVlNjUxYjJkZA")
+
     threading.Thread(target=alert_service.start, args=(alert_queue,)).start()
 
 
+
     # Create threads for each sensor
+
     threads = []
     for sensor_config in configuration['sensors']:
         sensor_type = sensor_config['type']
@@ -58,7 +64,7 @@ if __name__ == "__main__":
             threads.append(thread)
             thread.start()
         else:
-            # print no sensor found error
+            print("No sensor found")
             pass
 
     # Wait for all threads to finish

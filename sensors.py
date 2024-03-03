@@ -7,24 +7,24 @@ class Sensor:
 
     def read_data(self):
         # Simulate reading data from a real sensor
-        return random.uniform(-10, 120)
+        return random.uniform(-3, 105)
 
 
 # Subclasses for specific sensor types
 class TemperatureSensor(Sensor):
     def __init__(self):
-        super().__init__("Temperature")
+        super().__init__("temperature")
 
 
 class HumiditySensor(Sensor):
     def __init__(self):
-        super().__init__("Humidity")
+        super().__init__("humidity")
 
 
 class PressureSensor(Sensor):
     def __init__(self):
-        super().__init__("Pressure")
+        super().__init__("pressure")
 
     # override function specific for pressure sensor
     def read_data(self):
-        return random.uniform(850, 1100)
+        return random.uniform(898, 1105)
