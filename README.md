@@ -8,11 +8,10 @@ The alerts are then processed by an alert service that notifies a **Slack App** 
 
 ### Settings:
 
-* **Threads:** each sensor generates information and creates alerts messages simultaneously on three different thread,
-while the main thread pulls the alerts from the queue (explained below).
+* **Manager:** implements the starting point for each sensor thread and for the main thread. The manager receives data from the sensors and logs the invalid data in a message queue. (function: sensor_monitor())
 
-* **Messaging Queue:** the communication between the different threads happens
-using a message queue
-that's being filled with messages from the function *sensor_monitor* 
-on 3 different threads and emptied from messages with 
-the *AlertService.start()* on the main thread.
+* **Alert Service**: the queue is in use by the alert service which takes messages (function: start()) and deports them to "SLACK" (function: notify_slack())
+
+* **Sensor:** three different sensors that simulate reading data from a real sensor
+
+* **main:** starts the main thread and calls the manager.

@@ -1,4 +1,5 @@
 import threading
+import time
 from queue import Queue
 from alert_service import AlertMessage
 from consts import TOO_LOW, TOO_HIGH
@@ -17,7 +18,7 @@ class Manager:
         self.config = load_json(config_file)
         self.alert_queue = alert_queue
 
-        # Create threads for each sensor
+        # Create list of threads, one for each sensor
         self.sensor_threads = []
 
     def sensor_monitor(self, sensor, valid_range, queue: Queue):
@@ -31,8 +32,12 @@ class Manager:
             elif range_validity == TOO_HIGH:
                 queue.put(AlertMessage(sensor=sensor.sensor_type, message_type="high", data=data))
 
+            time.sleep(1)
+
     def start(self):
+
         for sensor_config in self.config['sensors']:
+
             sensor_type = sensor_config['type']
             valid_range = sensor_config['valid_range']
 

@@ -1,8 +1,8 @@
 import json
 from consts import VALID, TOO_LOW, TOO_HIGH
 
-# different utilities for the code
 
+# different utilities for the code
 def load_json(path) -> json:
     with open(path, 'r') as file:
         return json.load(file)

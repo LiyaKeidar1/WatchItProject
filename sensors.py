@@ -1,13 +1,11 @@
 import random
-
-
 class Sensor:
     def __init__(self, sensor_type):
         self.sensor_type = sensor_type
 
     def read_data(self):
         # Simulate reading data from a real sensor
-        return random.uniform(-2, 103)
+        return round(random.uniform(5, 103),2)
 
 
 # Subclasses for specific sensor types
@@ -27,4 +25,4 @@ class PressureSensor(Sensor):
 
     # override function specific for pressure sensor
     def read_data(self):
-        return random.uniform(899, 1102)
+        return round(random.uniform(899, 1102),2)

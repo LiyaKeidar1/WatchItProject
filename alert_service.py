@@ -28,8 +28,7 @@ class AlertService:
         if response.status_code == 200:
             print(f"Message: {message} sent successfully!")
         else:
-            print(
-                f"Failed to send message: {message}. Status code: {response.status_code}, Response text: {response.text}")
+            print(f"Failed to send message: {message}. Status code: {response.status_code}, Response text: {response.text}")
 
     def start(self):
         while True:
@@ -37,3 +36,4 @@ class AlertService:
                 notification = self.alert_queue.get()
                 sensor_type = notification.sensor
                 self.notify_slack(channel=sensor_type, message=notification)
+
