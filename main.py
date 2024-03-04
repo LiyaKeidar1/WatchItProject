@@ -43,7 +43,7 @@ if __name__ == "__main__":
     configuration = load_configuration('config.json')
 
     # Initialize alert service
-    alert_service = AlertService(api_token=API_TOKEN)
+    alert_service = AlertService()
 
     threading.Thread(target=alert_service.start, args=(alert_queue,)).start()
 

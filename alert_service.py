@@ -1,6 +1,9 @@
+import json
 import time
 from queue import Queue
 from slack_sdk import WebClient
+import requests
+from consts import URL_MAP
 from slack_sdk.errors import SlackApiError
 
 class AlertMessage:
@@ -17,24 +20,30 @@ class AlertMessage:
 
 
 class AlertService:
-    def __init__(self, api_token):
-        self.client = WebClient(api_token)
+    def __init__(self):
+        pass
 
-    def notify(self, channel, message: AlertMessage):
-        try:
-            response = self.client.chat_postMessage(channel=channel, text=message.__str__())
-            print(f"Message sent successfully: {response['ts']}")
-        except SlackApiError as e:
-            print(f"Error sending message to Slack: {e.response['error']}")
 
-        print(message)
+    def notify_slack(self, channel, message: AlertMessage):
+
+        webhook_url = URL_MAP[channel]
+        headers = {'Content-type': 'application/json'}
+        payload = {"text": str(message)}
+        response = requests.post(webhook_url, data=json.dumps(payload), headers=headers)
+
+        if response.status_code == 200:
+            print(f"Message: {message} sent successfully!")
+        else:
+            print(f"Failed to send message: {message}. Status code: {response.status_code}, Response text: {response.text}")
+
+
 
     def start(self, queue: Queue):
         while True:
             if not queue.empty():
                 notification = queue.get()
                 sensor_type = notification.sensor
-                self.notify(channel=sensor_type,  message=notification)
+                self.notify_slack(channel=sensor_type, message=notification)
             time.sleep(1)
 
 
